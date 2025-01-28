@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the following metadata."
-title: "需要主導型の輸送ネットワーク形成： Hub and Spoke 構造の創発"
+title: "Python code of ``DEMAND-DRIVEN FORMATION OF TRANSPORT NETWORKS: EMERGENCE OF HUB AND SPOKE STRUCTURE''"
 authors:
   - family-names: "Sakai"
     given-names: "Takara"
