@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the following metadata."
+authors:
+  - family-names: "Sakai"
+    given-names: "Takara"
+  - family-names: "Takayama"
+    given-names: "Yuki"
+date-released: "2025-01-28"
+version: "1.0.0"
+url: "https://github.com/takala/demand-driven-hub-and-spoke"
