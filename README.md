@@ -1,2 +1,5 @@
-# demand-driven-hub-and-spoke-Ja
-需要主導型の輸送ネットワーク形成： Hub and Spoke構造の創発
+# 需要主導型の輸送ネットワーク形成： Hub and Spoke構造の創発
+
+本リポジトリでは，下記論文における数値計算コードを掲載している．
+
+* 酒井 高良, 高山 雄貴: 需要主導型の輸送ネットワーク形成：Hub and Spoke構造の創発, 2024, [https://doi.org/10.51094/jxiv.749](https://doi.org/10.51094/jxiv.749)
