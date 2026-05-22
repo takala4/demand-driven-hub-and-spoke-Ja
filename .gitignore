@@ -1,0 +1,24 @@
+# Python cache / compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Numba JIT on-disk cache
+*.nbc
+*.nbi
+
+# verify_small.py / worker outputs
+code/_verify_*.json
+code/_stream_*.log
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code (local, do not commit)
+.claude/
