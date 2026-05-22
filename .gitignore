@@ -11,6 +11,10 @@ __pycache__/
 code/_verify_*.json
 code/_stream_*.log
 
+# Gurobi log
+gurobi.log
+*.gurobi.log
+
 # Notebook checkpoints
 .ipynb_checkpoints/
 

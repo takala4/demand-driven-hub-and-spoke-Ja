@@ -33,8 +33,10 @@ import psutil
 
 # Convenience aliases — extend as new variants are added.
 IMPL_MODULES = {
-    "v1": "hubspoke_v1",  # paper-faithful
-    "v2": "hubspoke",     # improved
+    "v1": "hubspoke_v1",  # paper-faithful Soland branch-and-bound
+    "v2": "hubspoke",     # improved Soland branch-and-bound
+    "v3": "hubspoke_v3",  # VNS stochastic heuristic
+    "v4": "hubspoke_v4",  # Gurobi MILP + PWL (deterministic epsilon-optimal)
 }
 
 
