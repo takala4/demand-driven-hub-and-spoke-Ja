@@ -37,6 +37,7 @@ IMPL_MODULES = {
     "v2": "hubspoke",     # improved Soland branch-and-bound
     "v3": "hubspoke_v3",  # VNS stochastic heuristic
     "v4": "hubspoke_v4",  # Gurobi MILP + PWL (deterministic epsilon-optimal)
+    "v5": "hubspoke_v5",  # interval-subtree DP (exact under phi>0, rho>t>0)
 }
 
 

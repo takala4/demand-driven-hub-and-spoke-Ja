@@ -42,6 +42,12 @@ try:
 except ImportError:
     _HAS_V4 = False
 
+try:
+    import hubspoke_v5 as hs_v5
+    _HAS_V5 = True
+except ImportError:
+    _HAS_V5 = False
+
 
 CASES = {
     "(a)": dict(phi=50.0, rho=20.0, t=1.0, nu=10.0, d=1.0, N=17),
@@ -103,7 +109,17 @@ def warmup_v2():
     return time.perf_counter() - t0
 
 
-def compare(label, params, *, run_v1, run_v3_flag, run_v4_flag):
+def run_dp(params):
+    prm = hs_v5.Parameter(**params)
+    net = hs_v5.Network(prm)
+    import time as _t
+    t0 = _t.perf_counter()
+    Z, tree, flow = hs_v5.solve(prm, net)
+    return {"Z": float(Z), "SP_tree": np.asarray(tree), "flow": np.asarray(flow),
+            "seconds": _t.perf_counter() - t0}
+
+
+def compare(label, params, *, run_v1, run_v3_flag, run_v4_flag, run_v5_flag):
     print(f"=== Case {label}: {params} ===")
     results = {}
 
@@ -133,6 +149,12 @@ def compare(label, params, *, run_v1, run_v3_flag, run_v4_flag):
         certified = "exact" if gap < 1e-6 else f"gap={gap:.1e}"
         print(f"  v4 : Z = {r['Z']:.6f}  time = {r['seconds']:.3f}s  ({certified})")
 
+    if run_v5_flag and _HAS_V5:
+        print("  v5 ...", flush=True)
+        results["v5"] = run_dp(params)
+        r = results["v5"]
+        print(f"  v5 : Z = {r['Z']:.6f}  time = {r['seconds']:.3f}s  (DP, conjecture)")
+
     # Consistency check against v1 (or v2 if no v1).
     ref_key = "v1" if "v1" in results else "v2"
     ref = results[ref_key]
@@ -153,6 +175,7 @@ def main():
     skip_v1 = "--no-v1" in argv
     run_v3  = "--v3" in argv or "--all-impls" in argv
     run_v4  = "--v4" in argv or "--all-impls" in argv
+    run_v5  = "--v5" in argv or "--all-impls" in argv
     argv = [a for a in argv if not a.startswith("--")]
 
     labels = argv or ["(e)"]
@@ -170,7 +193,8 @@ def main():
         results.append(compare(lbl, CASES[lbl],
                                run_v1=(not skip_v1),
                                run_v3_flag=run_v3,
-                               run_v4_flag=run_v4))
+                               run_v4_flag=run_v4,
+                               run_v5_flag=run_v5))
 
     print("==== summary ====")
     cols = ["case"]
@@ -178,6 +202,7 @@ def main():
     cols.append("v2 (s)")
     if run_v3 and _HAS_V3: cols.append("v3 (s)")
     if run_v4 and _HAS_V4: cols.append("v4 (s)")
+    if run_v5 and _HAS_V5: cols.append("v5 (s)")
     cols.append("v2 opt_Z")
     print(f"{cols[0]:<6}", end="")
     for h in cols[1:]:
@@ -189,6 +214,7 @@ def main():
         print(f" {r['v2']['seconds']:>12.3f}", end="")
         if run_v3 and _HAS_V3: print(f" {r['v3']['seconds']:>12.3f}", end="")
         if run_v4 and _HAS_V4: print(f" {r['v4']['seconds']:>12.3f}", end="")
+        if run_v5 and _HAS_V5: print(f" {r['v5']['seconds']:>12.3f}", end="")
         print(f" {r['v2']['Z']:>12.6f}")
 
 

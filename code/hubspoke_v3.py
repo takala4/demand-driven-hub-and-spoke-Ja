@@ -50,7 +50,7 @@ from hubspoke import Parameter, Network
 
 @njit(cache=True, fastmath=True)
 def _eval_tree(N, L, nu, SP_tree, node2link_mat, is_IT, coef_IT, coef_MT):
-    """Compute (Z, flow) for the arborescence encoded by SP_tree."""
+    """Compute (Z, flow) for the rooted tree encoded by SP_tree."""
     flow = np.zeros(L, dtype=np.float64)
     for node_idx in range(1, N):
         cur = node_idx
@@ -73,7 +73,7 @@ def _eval_tree(N, L, nu, SP_tree, node2link_mat, is_IT, coef_IT, coef_MT):
 # Tree validity check
 # ---------------------------------------------------------------------------
 
-def _is_valid_arborescence(N: int, tree: np.ndarray) -> bool:
+def _is_valid_tree(N: int, tree: np.ndarray) -> bool:
     """Return True iff the parent array describes a tree rooted at 0
     (every non-source node reaches 0 by following parent pointers)."""
     children = [[] for _ in range(N)]
@@ -127,7 +127,7 @@ def local_search_1opt(prm: Parameter, net: Network,
                     continue
                 old_parent = tree[i]
                 tree[i] = j
-                if _is_valid_arborescence(N, tree):
+                if _is_valid_tree(N, tree):
                     Z, flow = _eval_tree(
                         N, L, nu, tree,
                         net.node2link_mat, net.is_IT, net.coef_IT, net.coef_MT,
@@ -189,7 +189,7 @@ def _initial_tree(N: int, kind, rng: np.random.Generator) -> np.ndarray:
 
 def _random_tree(N: int, rng: np.random.Generator,
                  max_tries: int = 200) -> np.ndarray:
-    """Sample a uniformly random arborescence by rejection."""
+    """Sample a uniformly random rooted tree by rejection."""
     for _ in range(max_tries):
         tree = np.empty(N, dtype=np.int32)
         tree[0] = -1
@@ -198,7 +198,7 @@ def _random_tree(N: int, rng: np.random.Generator,
             while j == i:
                 j = int(rng.integers(0, N))
             tree[i] = j
-        if _is_valid_arborescence(N, tree):
+        if _is_valid_tree(N, tree):
             return tree
     tree = np.empty(N, dtype=np.int32)
     tree[0] = -1
@@ -222,7 +222,7 @@ def _shake(tree: np.ndarray, k: int, rng: np.random.Generator,
             while j == int(i):
                 j = int(rng.integers(0, N))
             new[i] = j
-        if _is_valid_arborescence(N, new):
+        if _is_valid_tree(N, new):
             return new
     return None
 
